@@ -9,6 +9,7 @@ jobs:
       - run:
           name: Building from templates
           command: |
+            apk add --update make
             make src
   build-and-push:
     docker:
