@@ -1,0 +1,42 @@
+version: 2.1
+
+jobs:
+  render-templates:
+    docker:
+      - image: docker:stable-git
+    steps:
+      - checkout
+      - run:
+          name: Building from templates
+          command: |
+            make src
+  build-and-push:
+    docker:
+      - image: docker:stable-git
+    steps:
+      - run:
+          name: Building and pushing image
+          command:
+            VERSION=$BRANCH.$SHORTHASH
+
+            echo "Logging in to eu.gcr.io"
+            docker login -u _json_key -p "$GCE_JSON_KEY" https://eu.gcr.io
+
+            echo "Building image"
+            make image
+
+            IMGTAG=eu.gcr.io/plum-infra/fluent/fluentd-kubernetes:$VERSION
+            echo "Retagging image"
+            docker tag fluent/fluentd-kubernetes:$VERSION $IMGTAG
+
+            echo "Pushing image $IMGTAG"
+            docker push $IMGTAG
+
+workflows:
+  version: 2
+  render-build-and-push:
+    jobs:
+      - render-templates
+      - build-and-push:
+          requires:
+            - render-templates
