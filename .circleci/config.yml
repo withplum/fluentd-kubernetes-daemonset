@@ -5,7 +5,6 @@ jobs:
     machine: true
     steps:
       - checkout
-      - setup_remote_docker
       - run:
           name: Building from templates
           command: |
