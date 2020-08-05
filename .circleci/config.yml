@@ -1,20 +1,15 @@
 version: 2.1
 
 jobs:
-  render-templates:
+  render-build-push:
     machine: true
     steps:
       - checkout
       - run:
-          name: Building from templates
+          name: Build templates, image and push
           command: |
             make src
-  build-and-push:
-    machine: true
-    steps:
-      - run:
-          name: Building and pushing image
-          command:
+
             echo "Logging in to eu.gcr.io"
             docker login -u _json_key -p "$GCE_SA_JSON" https://eu.gcr.io
 
@@ -32,7 +27,4 @@ workflows:
   version: 2
   render-build-and-push:
     jobs:
-      - render-templates
-      - build-and-push:
-          requires:
-            - render-templates
+      - render-build-push
