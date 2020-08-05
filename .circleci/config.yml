@@ -2,8 +2,7 @@ version: 2.1
 
 jobs:
   render-templates:
-    docker:
-      - image: docker:stable-git
+    machine: true
     steps:
       - checkout
       - setup_remote_docker
@@ -13,8 +12,7 @@ jobs:
             apk add --update make
             make src
   build-and-push:
-    docker:
-      - image: docker:stable-git
+    machine: true
     steps:
       - run:
           name: Building and pushing image
