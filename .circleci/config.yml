@@ -13,6 +13,8 @@ jobs:
             echo "Logging in to eu.gcr.io"
             docker login -u _json_key -p "$GCE_SA_JSON" https://eu.gcr.io
 
+            #pinning version of fluentd
+            VERSION=v1.11.1-debian-elasticsearch7-1.3
             echo "Building image"
             make image
 
