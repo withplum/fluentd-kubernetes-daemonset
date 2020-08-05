@@ -18,7 +18,7 @@ jobs:
             echo "Building image"
             make image
 
-            IMGTAG=eu.gcr.io/plum-infra/fluent/fluentd-kubernetes:$CIRCLE_BRANCH.$(git rev-parse --short HEAD)
+            IMGTAG=eu.gcr.io/plum-infra/fluentd-kubernetes:$CIRCLE_BRANCH.$(git rev-parse --short HEAD)
             echo "Retagging image"
             docker tag fluent/fluentd-kubernetes:$VERSION $IMGTAG
 
