@@ -8,7 +8,6 @@ jobs:
       - run:
           name: Building from templates
           command: |
-            apk add --update make
             make src
   build-and-push:
     machine: true
@@ -16,15 +15,13 @@ jobs:
       - run:
           name: Building and pushing image
           command:
-            VERSION=$BRANCH.$SHORTHASH
-
             echo "Logging in to eu.gcr.io"
-            docker login -u _json_key -p "$GCE_JSON_KEY" https://eu.gcr.io
+            docker login -u _json_key -p "$GCE_SA_JSON" https://eu.gcr.io
 
             echo "Building image"
             make image
 
-            IMGTAG=eu.gcr.io/plum-infra/fluent/fluentd-kubernetes:$VERSION
+            IMGTAG=eu.gcr.io/plum-infra/fluent/fluentd-kubernetes:$CIRCLE_BRANCH.$(git rev-parse --short HEAD)
             echo "Retagging image"
             docker tag fluent/fluentd-kubernetes:$VERSION $IMGTAG
 
